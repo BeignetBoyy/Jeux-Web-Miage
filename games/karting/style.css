@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+body {
+    background-color: #faebd7;
+    font-family: 'Inter';
+    font-weight: bold;
+
+    background-image: url("../../assets/images/backrground.png");
+    background-size: cover;       
+    background-position: center;  
+    background-repeat: no-repeat;  
+    background-attachment: fixed; 
+}
+
+.container-style {
+    border: 5px solid black;
+    border-radius: 20px;
+    filter: drop-shadow(5px 5px 0px black) ;
+}
+
+.scores {
+    display: flex;
+    justify-content: space-around
+}
+
+.canvas-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    background: #555;
+}
+
+#game-over {
+    display: none;
+    position: fixed;
+}
