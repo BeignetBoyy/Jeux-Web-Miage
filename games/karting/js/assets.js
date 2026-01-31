@@ -4,7 +4,11 @@ export { loadAssets };
 const assetsToLoadURLs = {
   redKart: { url: "assets/images/red_kart.png" },
   blueKart: { url: "assets/images/blue_kart.png" },
-  coin: { url: "assets/images/piece.png" }
+  coin: { url: "assets/images/piece.png" },
+  coinDissolve: { url: "assets/images/piece_dissolve.png" },
+  /*engine: { url: "assets/sounds/engine.wav" },
+  explosion: { url: "assets/sounds/explosion.wav" },
+  coin: { url: "assets/sounds/coin.wav" },*/
 };
 
 function loadAssets(callback) {

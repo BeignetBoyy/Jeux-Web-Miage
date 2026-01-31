@@ -1,20 +1,26 @@
 export default class Kart {
-    constructor(x, y, color, canvasHauteur, canvasLargeur, sprite, controls) {
+    constructor(x, y, color, canvasHauteur, canvasLargeur, angle, assets, controls) {
         this.x = x;
         this.y = y;
         this.color = color;
         this.controls = controls;
         this.canvasHauteur = canvasHauteur
         this.canvasLargeur = canvasLargeur
-        this.angle = 0;
+        this.angle = angle;
         this.speed = 0;
-        this.sprite = sprite
 
         this.maxSpeed = 4;
         this.accel = 0.2;
         this.friction = 0.05;
         this.turnSpeed = 0.08;
         this.radius = 15;
+
+        this.assets = assets;
+        this.sprite = assets[this.color + "Kart"]
+        // Temporaire a chager une fois howler fonctionnel
+        this.engineSound = new Audio("assets/sounds/engine.wav");
+        this.engineSound.loop = true;
+
     }
 
     update(keys) {
@@ -30,8 +36,15 @@ export default class Kart {
 
         // Rotation dépendante de la vitesse
         if (Math.abs(this.speed) > 0.2) {
+
+            const speedRatio = Math.abs(this.speed) / this.maxSpeed;
+            this.engineSound.volume = 1 * speedRatio
+            this.engineSound.play();
+
             if (keys[this.controls.left]) this.angle -= this.turnSpeed * (this.speed / this.maxSpeed);
             if (keys[this.controls.right]) this.angle += this.turnSpeed * (this.speed / this.maxSpeed);
+        }else {
+            this.engineSound.pause();
         }
 
         // Mouvement
@@ -45,26 +58,9 @@ export default class Kart {
         this.x = Math.max(0, Math.min(this.canvasLargeur, this.x));
         this.y = Math.max(0, Math.min(this.canvasHauteur, this.y));
     }
-
-    /*draw(ctx) {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
-
-        ctx.fillStyle = this.color;
-        ctx.fillRect(-15, -10, 30, 20);
-
-        // petit nez du kart
-        ctx.fillStyle = "black";
-        ctx.fillRect(5, -5, 10, 10);
-
-        ctx.restore();
-    }*/
-
+    
     draw(ctx) {
         const size = 16;
-        const scale = 2; // agrandir pixel art
-
         const dir = this.getDirectionIndex();
 
         ctx.save();

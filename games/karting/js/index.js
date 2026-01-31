@@ -16,7 +16,9 @@ let canvas,
     blueScoreDisplay,
     redKart, 
     blueKart, 
-    coin;
+    coin,
+    explosionSound,
+    lastTime;
 
 function init(){
     console.log("OK")
@@ -27,54 +29,65 @@ function init(){
         canvasLargeur = canvas.width;
         canvasHauteur = canvas.height;
         ctx = canvas.getContext("2d");
+        lastTime = 0;
         redScore = 0;
         blueScore = 0;
         redScoreDisplay = document.getElementById("red-score");
         blueScoreDisplay = document.getElementById("blue-score");
 
+        // TODO howler marche pas pour le moment je fait comme ça
+        explosionSound = new Audio("assets/sounds/explosion.wav");
+
         window.addEventListener("keydown", e => keys[e.key] = true);
         window.addEventListener("keyup", e => keys[e.key] = false); 
 
-        redKart = new Kart(200, 300, "red", canvasHauteur, canvasLargeur, assetsLoaded.redKart,{
+        redKart = new Kart(200, 300, "red", canvasHauteur, canvasLargeur, 0, assetsLoaded, {
             up: "z",
             down: "s",
             left: "q",
             right: "d"
         });
 
-        blueKart = new Kart(600, 300, "blue", canvasHauteur, canvasLargeur, assetsLoaded.blueKart,{
+        blueKart = new Kart(600, 300, "blue", canvasHauteur, canvasLargeur, Math.PI, assetsLoaded, {
             up: "ArrowUp",
             down: "ArrowDown",
             left: "ArrowLeft",
             right: "ArrowRight"
         });
 
-        coin = new Coin(canvasLargeur, canvasHauteur, assetsLoaded.coin);
+        coin = new Coin(canvasLargeur, canvasHauteur, assetsLoaded);
 
         requestAnimationFrame(loop);
     });
 }
 
-function loop() {
+function loop(time) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const dt = (time - lastTime) / 1000;
+    lastTime = time;
 
     redKart.update(keys);
     blueKart.update(keys);
+    coin.update(dt);
 
     if (checkCollision(redKart, blueKart)) {
         resolveCollision(redKart, blueKart);
+        explosionSound.play();
     }
 
-    if (checkCollision(redKart, coin)) {
-        coin.respawn(canvasLargeur, canvasHauteur);
-        redScore++;
-        redScoreDisplay.textContent = redScore;
-    }
+    if(coin.state === "DEFAULT"){
+        if (checkCollision(redKart, coin)) {
+            coin.collect()
+            redScore++;
+            redScoreDisplay.textContent = redScore;
+        }
 
-    if (checkCollision(blueKart, coin)) {
-        coin.respawn(canvasLargeur, canvasHauteur);
-        blueScore++;
-        blueScoreDisplay.textContent = blueScore;
+        if (checkCollision(blueKart, coin)) {
+            coin.collect()
+            blueScore++;
+            blueScoreDisplay.textContent = blueScore;
+        }
     }
 
     redKart.draw(ctx);
