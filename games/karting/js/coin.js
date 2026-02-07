@@ -19,8 +19,11 @@ export default class Coin {
     }
 
     respawn() {
-        this.x = Math.random() * this.width;
-        this.y = Math.random() * this.height;
+        // On evite que la piece apparaissent en dehors du terrain
+        do {
+            this.x = Math.random() * this.width;
+            this.y = Math.random() * this.height;
+        } while (!terrainCollision(this.x, this.y, 450, 300, 850, 550)); // On soustrait 50 a la largeur/hauteur de la collision pour la piece pour eviter qu'elle apparaissent trop proche des bords du terrain
 
         this.state = "DEFAULT";
         this.frame = 0;

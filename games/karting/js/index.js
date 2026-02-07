@@ -36,7 +36,6 @@ function init(){
         redScoreDisplay = document.getElementById("red-score");
         blueScoreDisplay = document.getElementById("blue-score");
 
-        // TODO howler marche pas pour le moment je fait comme ça
         explosionSound = assetsLoaded.explosion;
 
         window.addEventListener("keydown", e => keys[e.key] = true);
