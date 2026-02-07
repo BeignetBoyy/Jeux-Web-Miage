@@ -21,7 +21,7 @@ export default class Kart {
         this.sprite = assets[this.color + "Kart"]
         this.engineSound = assets[this.color + "Engine"];
         this.engineSound.loop = true;
-
+        this.explosionSound = assets.explosion;
     }
 
     update(keys) {
@@ -64,9 +64,15 @@ export default class Kart {
             // Si on a l'interieur du terrain on applique la nouvelle position
             this.x = newX;
             this.y = newY;
-        } else {
-            // Sinon on fait rebondir
+
+            } else {
+            // Sinon on fait rebondir et on joue le bruitage
+            if(this.speed > 0.4){
+                if(!this.explosionSound.playing()) this.explosionSound.play();
+            }
+
             this.speed *= -0.3;
+            //console.log(this.color + " OUTSIDE")
         }
 
         // On applique la friction
@@ -110,4 +116,44 @@ export default class Kart {
 
         return index;
     }
+
+    /**
+     * Logique de collision entre un kart et l'autre
+     * 
+     * @param {Kart} otherKart : le kart avec lequel on veut tester la collision
+     * @returns 
+     */
+    resolveCollision(otherKart) {
+        const dx = this.x - otherKart.x;
+        const dy = this.y - otherKart.y;
+        const distance = Math.hypot(dx, dy);
+
+        if (distance === 0) return;
+
+        const overlap = (this.radius + otherKart.radius) - distance;
+
+        const nx = dx / distance;
+        const ny = dy / distance;
+
+        // Séparation
+        this.x += nx * overlap / 2;
+        this.y += ny * overlap / 2;
+        otherKart.x -= nx * overlap / 2;
+        otherKart.y -= ny * overlap / 2;
+
+        // Échange de vitesse
+        const tempSpeed = this.speed;
+        this.speed = otherKart.speed * 0.8;
+        otherKart.speed = tempSpeed * 0.8;
+
+        if(this.speed > 0.4){
+            if(!this.explosionSound.playing()) this.explosionSound.play();
+        }
+
+        if(otherKart.speed > 0.4){
+            if(!otherKart.explosionSound.playing()) otherKart.explosionSound.play();
+        }
+    }
+
+
 }

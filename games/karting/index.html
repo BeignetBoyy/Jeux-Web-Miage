@@ -8,19 +8,21 @@
 </head>
 <body>
   <div class="scores">
-    <h1>Rouge : <span id="red-score">0</span></h1>
-    <h1>Bleu : <span id="blue-score">0</span></h1>
+    <h1 class="container-style">Rouge : <span id="red-score">0</span></h1>
+    <h1 class="container-style">Bleu : <span id="blue-score">0</span></h1>
   </div>
 
   <div class="canvas-section">
     <div id="start">
       <h1>Appuyer n'importe où pour lancer la partie</h1>
     </div>
+
     <div id="game-over">
       <h1>Fin de la partie</h1>
-      <h1><span id="red-end-score">0</span> - <span id="red-end-score">0</span></h1>
+      <h1 class="end-scores"><span id="red-end-score">0</span><span id="blue-end-score">0</span></h1>
       <h1>Victoire de : <span id="winner"></span></h1>
     </div>
+
     <canvas class="container-style" id="game" width="900" height="600"></canvas>
   </div>
 

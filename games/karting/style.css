@@ -20,7 +20,22 @@ body {
 
 .scores {
     display: flex;
-    justify-content: space-around
+    justify-content: space-evenly
+}
+
+.scores h1{
+    padding: 7px;
+    margin-bottom: 0px;
+    transform: translateY(20px);
+    z-index: 2;
+}
+
+.scores h1:first-child{
+    background-color: crimson;
+}
+
+.scores h1:last-child {
+    background-color: cornflowerblue;
 }
 
 .canvas-section {
@@ -43,4 +58,23 @@ canvas {
     display: none;
     position: fixed;
     z-index: 99;
+    flex-direction: column;
+    align-items: center;
+}
+
+.end-scores span{
+    font-size: 5rem;
+    padding: 10px;
+    margin: 10px;
+
+    border: 5px solid black;
+    border-radius: 20px;
+}
+
+#red-end-score {
+    background-color: crimson;
+}
+
+#blue-end-score {
+    background-color: cornflowerblue;
 }

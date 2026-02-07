@@ -1,7 +1,7 @@
 import Kart from "./kart.js";
 import Coin from "./coin.js";
 import { loadAssets } from "./assets.js";
-import { drawCapsule, checkCollision, resolveCollision } from "./utils.js";
+import { drawCapsule, checkCollision } from "./utils.js";
 
 
 window.onload = init;
@@ -13,6 +13,7 @@ let canvas,
     canvasHauteur, 
     redScore, 
     blueScore, 
+    winner,
     redScoreDisplay,
     blueScoreDisplay,
     startGameDiv,
@@ -35,8 +36,6 @@ function init(){
         blueScore = 0;
         redScoreDisplay = document.getElementById("red-score");
         blueScoreDisplay = document.getElementById("blue-score");
-
-        explosionSound = assetsLoaded.explosion;
 
         window.addEventListener("keydown", e => keys[e.key] = true);
         window.addEventListener("keyup", e => keys[e.key] = false); 
@@ -81,8 +80,7 @@ function loop(time) {
 
     // Verification collision entre les 2 karts
     if (checkCollision(redKart, blueKart)) {
-        resolveCollision(redKart, blueKart);
-        if(!explosionSound.playing()) explosionSound.play();
+        redKart.resolveCollision(blueKart);
     }
 
     // Verification collision & logique de recuperation de la piece
@@ -100,12 +98,13 @@ function loop(time) {
         }
     }
 
-    //drawCapsule(ctx, 450, 300, 900, 590)
+    //drawCapsule(ctx, 450, 300, 900, 580)
     redKart.draw(ctx);
     blueKart.draw(ctx);
     coin.draw(ctx);
 
     if(redScore == 10 || blueScore == 10) {
+        winner = redScore == 10 ? 'Rouge' : 'Bleu';
         finishGame();
     }else{
         requestAnimationFrame(loop);
@@ -113,8 +112,18 @@ function loop(time) {
 }
 
 function finishGame(){
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     const gameOverPopup = document.getElementById("game-over");
-    gameOverPopup.style.display = "block";
+    gameOverPopup.style.display = "flex";
+
+    const endRedScore = document.getElementById("red-end-score");
+    endRedScore.textContent = redScore;
+    const endBlueScore = document.getElementById("blue-end-score");
+    endBlueScore.textContent = blueScore;
+
+    const winnerSpan = document.getElementById("winner");
+    winnerSpan.textContent = winner;
 
     Howler.stop();
 }

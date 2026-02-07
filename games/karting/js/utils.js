@@ -1,4 +1,4 @@
-export { terrainCollision, drawCapsule, checkCollision, resolveCollision }
+export { terrainCollision, drawCapsule, checkCollision }
 
 /**
  * Teste si un objet est oui ou non à l'interieur de la boite de collision
@@ -69,35 +69,4 @@ function checkCollision(a, b) {
   const distance = Math.hypot(dx, dy);
 
   return distance < a.radius + b.radius;
-}
-
-/**
- * Logique de collision entre les objets a et b
- * 
- * @param {Kart} a : un objet ayant des coordonées x et y
- * @param {Kart} b : un objet ayant des coordonées x et y
- * @returns 
- */
-function resolveCollision(a, b) {
-  const dx = a.x - b.x;
-  const dy = a.y - b.y;
-  const distance = Math.hypot(dx, dy);
-
-  if (distance === 0) return;
-
-  const overlap = (a.radius + b.radius) - distance;
-
-  const nx = dx / distance;
-  const ny = dy / distance;
-
-  // Séparation
-  a.x += nx * overlap / 2;
-  a.y += ny * overlap / 2;
-  b.x -= nx * overlap / 2;
-  b.y -= ny * overlap / 2;
-
-  // Échange de vitesse
-  const tempSpeed = a.speed;
-  a.speed = b.speed * 0.8;
-  b.speed = tempSpeed * 0.8;
 }
