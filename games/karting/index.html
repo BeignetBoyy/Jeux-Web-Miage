@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8" />
-    <link rel='stylesheet' href='style.css'>
+    <link rel='stylesheet' href='./style.css'>
 
     <title>Kart POC</title>
 </head>
@@ -13,12 +13,18 @@
   </div>
 
   <div class="canvas-section">
-    <div id="game-over">
-      <h1>FIN</h1>
+    <div id="start">
+      <h1>Appuyer n'importe où pour lancer la partie</h1>
     </div>
-    <canvas class="container-style" id="game" width="800" height="600"></canvas>
+    <div id="game-over">
+      <h1>Fin de la partie</h1>
+      <h1><span id="red-end-score">0</span> - <span id="red-end-score">0</span></h1>
+      <h1>Victoire de : <span id="winner"></span></h1>
+    </div>
+    <canvas class="container-style" id="game" width="900" height="600"></canvas>
   </div>
 
   <script type="module" src="js/index.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
 </body>
 </html>

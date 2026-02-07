@@ -1,3 +1,5 @@
+import { terrainCollision } from "./utils.js";
+
 export default class Coin {
     constructor(width, height, assets) {
         this.radius = 10;
@@ -6,15 +8,14 @@ export default class Coin {
 
         this.assets = assets;
         this.sprite = assets.coin;
-        this.coinPickupSound = new Audio("assets/sounds/coin.wav"); // A modifier une fois qu'howler fonctionne
-        this.coinSpawnSound = new Audio("assets/sounds/coin_spawn.wav"); // A modifier une fois qu'howler fonctionne
+        this.coinPickupSound = assets.coinPickup;
+        this.coinSpawnSound =  assets.coinSpawn;
 
         this.frame = 0;
         this.frameCount = 6;
         this.animSpeed = 1;
 
         this.state = "DEFAULT"; // 3 etats possibles DEFAULT -> DISSOLVING -> HIDDEN
-        this.respawn();
     }
 
     respawn() {
@@ -64,7 +65,6 @@ export default class Coin {
     }
 
     update(dt) {
-        console.log(this.state)
         if (this.state === "DISSOLVING") {
             this.frame += this.animSpeed;
 

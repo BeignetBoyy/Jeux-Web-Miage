@@ -6,9 +6,11 @@ const assetsToLoadURLs = {
   blueKart: { url: "assets/images/blue_kart.png" },
   coin: { url: "assets/images/piece.png" },
   coinDissolve: { url: "assets/images/piece_dissolve.png" },
-  /*engine: { url: "assets/sounds/engine.wav" },
-  explosion: { url: "assets/sounds/explosion.wav" },
-  coin: { url: "assets/sounds/coin.wav" },*/
+  redEngine: { url: "assets/sounds/engine.wav", loop: true },
+  blueEngine: { url: "assets/sounds/engine2.wav", loop: true },
+  explosion: { url: "assets/sounds/explosion.wav", loop: false  },
+  coinPickup: { url: "assets/sounds/coin.wav", loop: false  },
+  coinSpawn: { url: "assets/sounds/coin_spawn.wav", loop: false  }
 };
 
 function loadAssets(callback) {
@@ -67,7 +69,7 @@ function loadAssetsUsingHowlerAndNoXhr(assetsToBeLoaded, callback) {
         "loading " + name + " buffer : " + assetsToBeLoaded[name].loop
       );
       assetsLoaded[name] = new Howl({
-        urls: [url],
+        src: [url],
         buffer: assetsToBeLoaded[name].buffer,
         loop: assetsToBeLoaded[name].loop,
         autoplay: false,

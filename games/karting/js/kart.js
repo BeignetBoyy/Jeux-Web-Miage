@@ -1,3 +1,5 @@
+import { terrainCollision } from "./utils.js";
+
 export default class Kart {
     constructor(x, y, color, canvasHauteur, canvasLargeur, angle, assets, controls) {
         this.x = x;
@@ -17,13 +19,13 @@ export default class Kart {
 
         this.assets = assets;
         this.sprite = assets[this.color + "Kart"]
-        // Temporaire a chager une fois howler fonctionnel
-        this.engineSound = new Audio("assets/sounds/engine.wav");
+        this.engineSound = assets[this.color + "Engine"];
         this.engineSound.loop = true;
 
     }
 
     update(keys) {
+
         // Accélération / frein
         if (keys[this.controls.up]) this.speed += this.accel;
         if (keys[this.controls.down]) this.speed -= this.accel;
@@ -38,25 +40,42 @@ export default class Kart {
         if (Math.abs(this.speed) > 0.2) {
 
             const speedRatio = Math.abs(this.speed) / this.maxSpeed;
-            this.engineSound.volume = 1 * speedRatio
-            this.engineSound.play();
+            if (!this.engineSound.playing()) {
+                this.engineId = this.engineSound.play();
+            }
+
+            this.engineSound.volume(speedRatio * 0.8, this.engineId);
+            this.engineSound.rate(0.8 + speedRatio, this.engineId);
+
 
             if (keys[this.controls.left]) this.angle -= this.turnSpeed * (this.speed / this.maxSpeed);
             if (keys[this.controls.right]) this.angle += this.turnSpeed * (this.speed / this.maxSpeed);
         }else {
-            this.engineSound.pause();
+            this.engineSound.stop(this.engineId);
         }
 
-        // Mouvement
-        this.x += Math.cos(this.angle) * this.speed;
-        this.y += Math.sin(this.angle) * this.speed;
 
-        // Friction
+        // Calcul du mouvement du kart
+        const newX = this.x + Math.cos(this.angle) * this.speed;;
+        const newY = this.y + Math.sin(this.angle) * this.speed;;
+
+        // Calcul des collisions entre le terrain et le kart
+        if (terrainCollision(newX, newY, 450, 300, 900, 590)) { //Ici la hauteur du canvas devrait etre 600 mais on la met a 590 pour eviter que les karts sortent du canvas
+            // Si on a l'interieur du terrain on applique la nouvelle position
+            this.x = newX;
+            this.y = newY;
+        } else {
+            // Sinon on fait rebondir
+            this.speed *= -0.3;
+        }
+
+        // On applique la friction
         this.speed *= (1 - this.friction);
 
+        /* Inutile utilisé pour terrain rectangulaire
         // Bords de l'écran
         this.x = Math.max(0, Math.min(this.canvasLargeur, this.x));
-        this.y = Math.max(0, Math.min(this.canvasHauteur, this.y));
+        this.y = Math.max(0, Math.min(this.canvasHauteur, this.y));*/
     }
     
     draw(ctx) {

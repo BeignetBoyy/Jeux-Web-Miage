@@ -30,10 +30,17 @@ body {
 }
 
 canvas {
-    background: #555;
+    background-image: url(assets/images/background.png);
+}
+
+#start {
+    display: block;
+    position: fixed;
+    z-index: 99;
 }
 
 #game-over {
     display: none;
     position: fixed;
+    z-index: 99;
 }

@@ -1,6 +1,7 @@
 import Kart from "./kart.js";
 import Coin from "./coin.js";
 import { loadAssets } from "./assets.js";
+import { drawCapsule, checkCollision, resolveCollision } from "./utils.js";
 
 
 window.onload = init;
@@ -14,6 +15,7 @@ let canvas,
     blueScore, 
     redScoreDisplay,
     blueScoreDisplay,
+    startGameDiv,
     redKart, 
     blueKart, 
     coin,
@@ -22,7 +24,6 @@ let canvas,
 
 function init(){
     console.log("OK")
-
 
     loadAssets((assetsLoaded) => {
         canvas = document.getElementById("game");
@@ -36,10 +37,12 @@ function init(){
         blueScoreDisplay = document.getElementById("blue-score");
 
         // TODO howler marche pas pour le moment je fait comme ça
-        explosionSound = new Audio("assets/sounds/explosion.wav");
+        explosionSound = assetsLoaded.explosion;
 
         window.addEventListener("keydown", e => keys[e.key] = true);
         window.addEventListener("keyup", e => keys[e.key] = false); 
+
+        startGameDiv = document.getElementById("start");
 
         redKart = new Kart(200, 300, "red", canvasHauteur, canvasLargeur, 0, assetsLoaded, {
             up: "z",
@@ -56,9 +59,15 @@ function init(){
         });
 
         coin = new Coin(canvasLargeur, canvasHauteur, assetsLoaded);
-
-        requestAnimationFrame(loop);
+        canvas.addEventListener("click", startGame, { once: true }); 
     });
+}
+
+function startGame() {
+    startGameDiv.style.display = "none"
+    unlockAudio();
+    coin.respawn();
+    requestAnimationFrame(loop);
 }
 
 function loop(time) {
@@ -71,11 +80,13 @@ function loop(time) {
     blueKart.update(keys);
     coin.update(dt);
 
+    // Verification collision entre les 2 karts
     if (checkCollision(redKart, blueKart)) {
         resolveCollision(redKart, blueKart);
-        explosionSound.play();
+        if(!explosionSound.playing()) explosionSound.play();
     }
 
+    // Verification collision & logique de recuperation de la piece
     if(coin.state === "DEFAULT"){
         if (checkCollision(redKart, coin)) {
             coin.collect()
@@ -90,50 +101,25 @@ function loop(time) {
         }
     }
 
+    //drawCapsule(ctx, 450, 300, 900, 590)
     redKart.draw(ctx);
     blueKart.draw(ctx);
     coin.draw(ctx);
 
-    if(redScore == 20 || blueScore == 20) {
+    if(redScore == 10 || blueScore == 10) {
         finishGame();
     }else{
         requestAnimationFrame(loop);
     }
 }
 
-function checkCollision(a, b) {
-  const dx = a.x - b.x;
-  const dy = a.y - b.y;
-  const distance = Math.hypot(dx, dy);
-
-  return distance < a.radius + b.radius;
-}
-
-function resolveCollision(a, b) {
-  const dx = a.x - b.x;
-  const dy = a.y - b.y;
-  const distance = Math.hypot(dx, dy);
-
-  if (distance === 0) return;
-
-  const overlap = (a.radius + b.radius) - distance;
-
-  const nx = dx / distance;
-  const ny = dy / distance;
-
-  // Séparation
-  a.x += nx * overlap / 2;
-  a.y += ny * overlap / 2;
-  b.x -= nx * overlap / 2;
-  b.y -= ny * overlap / 2;
-
-  // Échange de vitesse
-  const tempSpeed = a.speed;
-  a.speed = b.speed * 0.8;
-  b.speed = tempSpeed * 0.8;
-}
-
 function finishGame(){
     const gameOverPopup = document.getElementById("game-over");
     gameOverPopup.style.display = "block";
+
+    Howler.stop();
+}
+
+function unlockAudio() {
+  Howler.ctx.resume();
 }
