@@ -65,14 +65,13 @@ export default class Kart {
             this.x = newX;
             this.y = newY;
 
-            } else {
+        } else {
             // Sinon on fait rebondir et on joue le bruitage
             if(this.speed > 0.4){
                 if(!this.explosionSound.playing()) this.explosionSound.play();
             }
 
             this.speed *= -0.3;
-            //console.log(this.color + " OUTSIDE")
         }
 
         // On applique la friction
@@ -154,6 +153,4 @@ export default class Kart {
             if(!otherKart.explosionSound.playing()) otherKart.explosionSound.play();
         }
     }
-
-
 }

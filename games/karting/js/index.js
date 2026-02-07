@@ -20,8 +20,9 @@ let canvas,
     redKart, 
     blueKart, 
     coin,
-    explosionSound,
-    lastTime;
+    lastTime,
+    gameOverPopup,
+    replayButton;
 
 function init(){
     console.log("OK")
@@ -34,8 +35,12 @@ function init(){
         lastTime = 0;
         redScore = 0;
         blueScore = 0;
+
         redScoreDisplay = document.getElementById("red-score");
         blueScoreDisplay = document.getElementById("blue-score");
+        gameOverPopup = document.getElementById("game-over");
+        replayButton = document.getElementById("replay");
+
 
         window.addEventListener("keydown", e => keys[e.key] = true);
         window.addEventListener("keyup", e => keys[e.key] = false); 
@@ -57,7 +62,8 @@ function init(){
         });
 
         coin = new Coin(canvasLargeur, canvasHauteur, assetsLoaded);
-        canvas.addEventListener("click", startGame, { once: true }); 
+        canvas.addEventListener("click", startGame, { once: true });
+        replayButton.addEventListener("click", restartGame);
     });
 }
 
@@ -114,7 +120,6 @@ function loop(time) {
 function finishGame(){
     //ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const gameOverPopup = document.getElementById("game-over");
     gameOverPopup.style.display = "flex";
 
     const endRedScore = document.getElementById("red-end-score");
@@ -126,6 +131,29 @@ function finishGame(){
     winnerSpan.textContent = winner;
 
     Howler.stop();
+}
+
+function restartGame(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    redKart.x = 200;
+    redKart.y = 300;
+    redKart.angle = 0;
+    redKart.speed = 0;
+
+    blueKart.x = 600;
+    blueKart.y = 300;
+    blueKart.angle = Math.PI;
+    blueKart.speed = 0;
+
+    redScore = 0;
+    blueScore = 0;
+    redScoreDisplay.textContent = redScore;
+    blueScoreDisplay.textContent = blueScore;
+
+    gameOverPopup.style.display = "none";
+
+    startGame()
 }
 
 function unlockAudio() {
