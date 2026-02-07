@@ -22,7 +22,8 @@ let canvas,
     coin,
     lastTime,
     gameOverPopup,
-    replayButton;
+    replayButton,
+    allTrails;
 
 function init(){
     console.log("OK")
@@ -80,9 +81,25 @@ function loop(time) {
     const dt = (time - lastTime) / 1000;
     lastTime = time;
 
+    coin.update(dt);
     redKart.update(keys);
     blueKart.update(keys);
-    coin.update(dt);
+
+    for (let i = redKart.trails.length - 1; i >= 0; i--) {
+        redKart.trails[i].update(dt);
+
+        if (redKart.trails[i].life <= 0) {
+            redKart.trails.splice(i, 1);
+        }
+    }
+
+    for (let i = blueKart.trails.length - 1; i >= 0; i--) {
+        blueKart.trails[i].update(dt);
+
+        if (blueKart.trails[i].life <= 0) {
+            blueKart.trails.splice(i, 1);
+        }
+    }
 
     // Verification collision entre les 2 karts
     if (checkCollision(redKart, blueKart)) {
@@ -105,10 +122,14 @@ function loop(time) {
     }
 
     //drawCapsule(ctx, 450, 300, 900, 580)
+    blueKart.trails.forEach(t => t.draw(ctx));
+    redKart.trails.forEach(t => t.draw(ctx));
+    coin.drawShadow(ctx);
     redKart.draw(ctx);
     blueKart.draw(ctx);
     coin.draw(ctx);
 
+    
     if(redScore == 10 || blueScore == 10) {
         winner = redScore == 10 ? 'Rouge' : 'Bleu';
         finishGame();

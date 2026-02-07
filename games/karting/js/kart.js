@@ -1,4 +1,5 @@
 import { terrainCollision } from "./utils.js";
+import Particule from "./particule.js";
 
 export default class Kart {
     constructor(x, y, color, canvasHauteur, canvasLargeur, angle, assets, controls) {
@@ -22,6 +23,8 @@ export default class Kart {
         this.engineSound = assets[this.color + "Engine"];
         this.engineSound.loop = true;
         this.explosionSound = assets.explosion;
+
+        this.trails = []
     }
 
     update(keys) {
@@ -61,6 +64,11 @@ export default class Kart {
 
         // Calcul des collisions entre le terrain et le kart
         if (terrainCollision(newX, newY, 450, 300, 900, 590)) { //Ici la hauteur du canvas devrait etre 600 mais on la met a 590 pour eviter que les karts sortent du canvas
+            
+            if(this.speed > 0.5){
+                this.trails.push(new Particule(this.x, this.y));
+            }
+            
             // Si on a l'interieur du terrain on applique la nouvelle position
             this.x = newX;
             this.y = newY;
@@ -88,6 +96,7 @@ export default class Kart {
         const dir = this.getDirectionIndex();
 
         ctx.save();
+
         ctx.translate(this.x, this.y);
 
         ctx.imageSmoothingEnabled = false; // pixel art net
