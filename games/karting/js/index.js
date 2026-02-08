@@ -23,12 +23,17 @@ let canvas,
     lastTime,
     gameOverPopup,
     replayButton,
-    allTrails;
+    bgMusic,
+    winSoundEffect;
 
 function init(){
     console.log("OK")
 
     loadAssets((assetsLoaded) => {
+
+        bgMusic = assetsLoaded.bgMusic;
+        winSoundEffect = assetsLoaded.win;
+
         canvas = document.getElementById("game");
         canvasLargeur = canvas.width;
         canvasHauteur = canvas.height;
@@ -63,7 +68,7 @@ function init(){
         });
 
         coin = new Coin(canvasLargeur, canvasHauteur, assetsLoaded);
-        canvas.addEventListener("click", startGame, { once: true });
+        window.addEventListener("click", startGame, { once: true });
         replayButton.addEventListener("click", restartGame);
     });
 }
@@ -71,6 +76,7 @@ function init(){
 function startGame() {
     startGameDiv.style.display = "none"
     unlockAudio();
+    bgMusic.play();
     coin.respawn();
     requestAnimationFrame(loop);
 }
@@ -152,6 +158,7 @@ function finishGame(){
     winnerSpan.textContent = winner;
 
     Howler.stop();
+    winSoundEffect.play()
 }
 
 function restartGame(){

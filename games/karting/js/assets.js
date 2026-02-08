@@ -10,7 +10,9 @@ const assetsToLoadURLs = {
   blueEngine: { url: "assets/sounds/engine2.wav", loop: true },
   explosion: { url: "assets/sounds/explosion.wav", loop: false  },
   coinPickup: { url: "assets/sounds/coin.wav", loop: false  },
-  coinSpawn: { url: "assets/sounds/coin_spawn.wav", loop: false  }
+  coinSpawn: { url: "assets/sounds/coin_spawn.wav", loop: false  },
+  win: { url: "assets/sounds/win.mp3", loop: false  },
+  bgMusic: { url: "assets/sounds/Stadium 64.wav", loop: true, volume: 0.5 }
 };
 
 function loadAssets(callback) {
