@@ -2,17 +2,17 @@ export { loadAssets };
 
 /* Les assets, on pourra plus tard ajouter des sons et des musiques */
 const assetsToLoadURLs = {
-  redKart: { url: "assets/images/red_kart.png" },
-  blueKart: { url: "assets/images/blue_kart.png" },
-  coin: { url: "assets/images/piece.png" },
-  coinDissolve: { url: "assets/images/piece_dissolve.png" },
-  redEngine: { url: "assets/sounds/engine.wav", loop: true },
-  blueEngine: { url: "assets/sounds/engine2.wav", loop: true },
-  explosion: { url: "assets/sounds/explosion.wav", loop: false  },
-  coinPickup: { url: "assets/sounds/coin.wav", loop: false  },
-  coinSpawn: { url: "assets/sounds/coin_spawn.wav", loop: false  },
-  win: { url: "assets/sounds/win.mp3", loop: false  },
-  bgMusic: { url: "assets/sounds/Stadium 64.wav", loop: true, volume: 0.5 }
+  redKart: { url: "/karting/assets/images/red_kart.png" },
+  blueKart: { url: "/karting/assets/images/blue_kart.png" },
+  coin: { url: "/karting/assets/images/piece.png" },
+  coinDissolve: { url: "/karting/assets/images/piece_dissolve.png" },
+  redEngine: { url: "/karting/assets/sounds/engine.wav", loop: true },
+  blueEngine: { url: "/karting/assets/sounds/engine2.wav", loop: true },
+  explosion: { url: "/karting/assets/sounds/explosion.wav", loop: false  },
+  coinPickup: { url: "/karting/assets/sounds/coin.wav", loop: false  },
+  coinSpawn: { url: "/karting/assets/sounds/coin_spawn.wav", loop: false  },
+  win: { url: "/karting/assets/sounds/win.mp3", loop: false  },
+  bgMusic: { url: "/karting/assets/sounds/Stadium 64.wav", loop: true, volume: 0.5 }
 };
 
 function loadAssets(callback) {
