@@ -3,24 +3,33 @@ window.onload = init();
 function init(){
     console.log("Page OK");
 
-    /*let login_div = document.getElementById("login");
-    let signin_div = document.getElementById("signin");
+    const fullForm = document.querySelector(".full-form");
+    
+    loggedIn = localStorage.getItem("loggedIn");
+    if(loggedIn){
+        const loggedIn_div = document.querySelector(".logged-in");
+        const pseudo = document.getElementById("pseudo");
 
-    if(localStorage.getItem("loggedIn")){
-        signin_div.style.display = "none";
-    }else{
-        login_div.style.display = "none";
-    }*/
+        pseudo.textContent = loggedIn;
+        loggedIn_div.style.display = "flex"
+        if(fullForm) fullForm.style.display = "none"
+    }
 
     setListeners();
 }
 
 function login(username, password) {
 
-    const testUser = localStorage.getItem("username")
+    const testUser = localStorage.getItem(username)
 
     if(testUser){
-        const testPassword = JSON.parse(testUser).get("password")
+
+        const parsedUser = JSON.parse(testUser)
+        console.log(parsedUser)
+
+
+        const testPassword = parsedUser["password"]
+        
         if(testPassword == password) {
             localStorage.setItem("loggedIn", username);
             // Password is wrong
@@ -55,8 +64,10 @@ function logout(){
 }
 
 function setListeners() {
-    let login_form = document.querySelector(".login-form");
-    let signin_form = document.querySelector(".signin-form");
+
+    const login_form = document.querySelector(".login-form");
+    const signin_form = document.querySelector(".signin-form");
+    const logoutBtn = document.getElementById("logout");
 
     if(login_form){
         login_form.addEventListener("submit", (e) => {
@@ -66,7 +77,6 @@ function setListeners() {
             const password = hash(formData.get("password"))
 
             login(username, password)     
-            e.preventDefault();
         })
     }
 
@@ -79,8 +89,14 @@ function setListeners() {
             const password = hash(formData.get("password"))
 
             signin(username, password, email)     
-            e.preventDefault();
         })
+    }
+
+    if(logoutBtn){
+        logoutBtn.addEventListener("click", () => {
+            console.log("CLICK")
+            logout();
+        });
     }
 }
 
