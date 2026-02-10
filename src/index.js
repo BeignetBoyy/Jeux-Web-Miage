@@ -11,6 +11,7 @@ const routes = require('./routes/routes');
 const game1_routes = require('./routes/game1_routes');
 const mongo_routes = require('./routes/mongo_routes');
 
+app.use(express.json())
 
 app.use('/views', express.static(path.join(__dirname, '..','public','views')));
 app.use('/styles', express.static(path.join(__dirname, '..','public','styles')));

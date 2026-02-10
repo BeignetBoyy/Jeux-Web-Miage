@@ -2,47 +2,12 @@
 
 const express = require('express');
 const router = express.Router();
+const Users = require('../db/Users');
 const mongoose = require('mongoose');
 
 router.get('/all', async (req, res) => {
   try {
-    const users = await Emargement.find().sort({ date: -1 });
-    res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' }); 
-  }
-});
-
-router.get('/all/year/:date', async (req, res) => {
-  try {
-    const inputDate = req.params.date;
-
-    // Subtract 1 year from the given date
-    const splitDate = inputDate.split("-");
-    splitDate[0] = Number(splitDate[0]) - 1
-    const newDate = splitDate.join("-")
-
-    console.log(newDate)
-
-    // Assuming your documents have a 'createdAt' or similar date field
-    const users = await Emargement.find({
-      date: { $gte: newDate, $lte : inputDate}
-    }).sort({ date: -1 });
-
-    res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' }); 
-  }
-});
-
-router.get('/open/:date', async (req, res) => {
-
-  const date = req.params.date
-
-  try {
-    const users = await Emargement.find({date: { $eq: date }, heureDepart: { $eq: null}}).sort({ heureArrivee: 1 });
+    const users = await Users.find().sort({ createdAt: -1 });
     res.json(users);
   } catch (err) {
     console.error(err);
@@ -55,7 +20,20 @@ router.get('/id/:id', async (req, res) => {
   const id = req.params.id
 
   try {
-    const users = await Emargement.findById(id);
+    const users = await Users.findById(id);
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' }); 
+  }
+});
+
+router.get('/username/:username', async (req, res) => {
+
+  const username = req.params.username
+
+  try {
+    const users = await Users.find({ 'username' : username });
     res.json(users);
   } catch (err) {
     console.error(err);
@@ -64,12 +42,13 @@ router.get('/id/:id', async (req, res) => {
 });
 
 
+
 router.post('/insert', async (req, res) => {
   try {
 
     console.log(req.body);
 
-    const newEmargement = await Emargement.create(req.body);
+    const newEmargement = await Users.create(req.body);
     
     res.json({ message: "Nouvel emargement inséré avec succés"});
   } catch (err) {
@@ -107,18 +86,12 @@ router.patch('/update/:id', async (req, res) => {
   }
 });
 
-router.delete('/delete/date/:date', async (req, res) => {
+router.delete('/delete/id/:id', async (req, res) => {
   try {
 
-    const inputDate = req.params.date
+    const id = req.params.id
 
-    // Subtract 1 year from the given date
-    const splitDate = inputDate.split("-");
-    splitDate[0] = Number(splitDate[0]) - 1
-    const newDate = splitDate.join("-")
-
-
-    const result = await Emargement.deleteMany({ date : { $lt: newDate }});
+    const result = await Users.deleteOne({ _id : id });
 
     if (!result) {
       return res.status(404).json({ error: 'Document not found' });
