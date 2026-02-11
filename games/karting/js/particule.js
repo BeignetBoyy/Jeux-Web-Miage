@@ -12,6 +12,9 @@ export default class Particule {
     }
 
     draw(ctx) {
+
+        ctx.save();
+
         ctx.globalAlpha = this.life;
 
         ctx.fillStyle = "#775235"; // couleur terre
@@ -35,5 +38,7 @@ export default class Particule {
         ctx.fill();
 
         ctx.globalAlpha = 1;
+
+        ctx.restore();
     }
 }

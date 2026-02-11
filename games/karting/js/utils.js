@@ -43,6 +43,8 @@ function terrainCollision(x, y, cx, cy, width, height) {
 function drawCapsule(ctx, cx, cy, w, h) {
   const r = h / 2;
 
+  ctx.save()
+
   ctx.beginPath();
 
   ctx.moveTo(cx - w/2 + r, cy - r);
@@ -54,6 +56,8 @@ function drawCapsule(ctx, cx, cy, w, h) {
   ctx.arc(cx - w/2 + r, cy, r, Math.PI/2, -Math.PI/2);
 
   ctx.stroke();
+
+  ctx.restore();
 }
 
 /**

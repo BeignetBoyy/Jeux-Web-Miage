@@ -60,18 +60,24 @@ export default class Coin {
     }
 
     drawShadow(ctx){
-
         if(this.state === "DEFAULT"){
+            ctx.save()
+
             ctx.globalAlpha = 0.5
             ctx.fillStyle = "#000000"; // couleur terre
+
+            // utilisation des transformations geometriques
+            ctx.translate(this.x + 4, this.y + 36)
             ctx.beginPath();
             
             // On dessine 2 rectangles legerement offset pour que ça fasse une trainée par roue
-            ctx.ellipse(this.x + 4, this.y + 36, 10, 4, 0, 0, Math.PI * 2);
+            ctx.ellipse(0, 0, 10, 4, 0, 0, Math.PI * 2);
 
             ctx.fill();
 
             ctx.globalAlpha = 1;
+
+            ctx.restore()
         }
     }
 

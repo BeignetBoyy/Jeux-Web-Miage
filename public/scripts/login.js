@@ -40,7 +40,7 @@ function login(username, password) {
 }
 
 
-function signin(username, password, email) {
+async function signin(username, password, email) {
 
     // Si le pseudo existe déjà
     if(localStorage.getItem(username)) {
@@ -53,6 +53,20 @@ function signin(username, password, email) {
         "password" : password,
         "email" : email,
         "createdAt" : Date.now(),
+    }
+
+    const insertResponse = await fetch(`/mongo/insert`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+    });
+
+    // Si la requete est reussi on renvoi directement à la page de base sinon erreur
+    const insertResult = await insertResponse.json();
+    if (insertResponse.ok) {
+        alert(`Success: ${insertResult.message}`);
+    } else {
+        alert(`Error: ${insertResult.error}`);
     }
 
     localStorage.setItem(username, JSON.stringify(user)); 
@@ -81,14 +95,14 @@ function setListeners() {
     }
 
     if(signin_form){
-        signin_form.addEventListener("submit", (e) => {
+        signin_form.addEventListener("submit", async (e) => {
             var formData = new FormData(signin_form)
 
             const username = sanitize(formData.get("username"))
             const email = sanitize(formData.get("email"))
             const password = hash(formData.get("password"))
 
-            signin(username, password, email)     
+            await signin(username, password, email)     
         })
     }
 
