@@ -1,6 +1,8 @@
 # Jeux Web Miage
 
-## Jeux 1 - Karting 
+## Jeux 1 - Karting
+
+[Démonstration vidéo](https://youtu.be/THkOmA98pb4)
 
 ### Infos
 Seul le jeu de karting fonctionne pour le moment, le reste du site n'est pas fini. **NE SURTOUT PAS VOUS CONNECTER** les mots de passes sont en clair.
